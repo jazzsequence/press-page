@@ -73,9 +73,9 @@ function ap_press_info_meta() {
 	echo '<input type="hidden" name="ap_noncename" id="ap_noncename" value="' .
 	wp_create_nonce( wp_basename(__FILE__) ) . '" />';
 
-	echo '<p><label for="url"><strongArticle URL</strong></label><br />';
+	echo '<p><label for="url"><strong>Article URL</strong></label><br />';
 	echo '<input class="widefat" type="text" name="url" value="' . get_post_meta( $post->ID, 'url', true ) . '" /><br />';
-	echo '<em>Article URL</em></p>';
+	echo '<em>URL to the article</em></p>';
 
 	echo '<p><label for="periodical"><strong>Periodical</strong></label><br />';
 	echo '<input class="widefat" type="text" name="periodical" value="' . get_post_meta( $post->ID, 'periodical', true ) . '" /><br />';
