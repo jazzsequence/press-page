@@ -10,7 +10,7 @@
  */
 function post_type_press() {
     $labels = array(
-		'name' => __('Articles', 'presspage'),
+		'name' => __('Press', 'presspage'),
 		'singular_name' => __('Article', 'presspage'),
 		'add_new' => __('Add New', 'presspage'),
 		'add_new_item' => __('Add New Article','presspage'),
