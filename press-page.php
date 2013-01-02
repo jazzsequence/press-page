@@ -38,30 +38,31 @@ License: GPL3
  * registers the javascript
  * @author Chris Reynolds
  * @since 0.1
- * @link http://scribu.net/wordpress/optimal-script-loading.html
  */
 function presspage_register_scripts() {
-	wp_register_script( 'kinetic', presspage_plugin_js . 'jquery.kinetic.js', array( 'jquery', 'jquery-ui' ), '1.5', true );
-	wp_register_script( 'mousewheel', presspage_plugin_js . 'jquery.mousewheel.min.js', array( 'jquery', 'jquery-ui' ), '3.0.6', true );
-	wp_register_script( 'smoothdivscroll', presspage_plugin_js . 'jquery.smoothdivscroll-1.3-min.js', array( 'kinetic', 'mousewheel', 'jquery', 'jquery-ui', 'jquery-ui-widget', '1.3', true ) );
-}
-add_action( 'init', 'presspage_register_scripts' );
-
-/**
- * Press Page scripts
- * loads the javascript, but only on a page with the /press/ slug. This is hard-coded.
- * @author Chris Reynolds
- * @since 0.1
- * @link http://scribu.net/wordpress/optimal-script-loading.html
- */
-function presspage_load_scripts() {
+	wp_register_script( 'kinetic', presspage_plugin_js . 'jquery.kinetic.js', 'jquery', '1.5', true );
+	wp_register_script( 'mousewheel', presspage_plugin_js . 'jquery.mousewheel.min.js', 'jquery', '3.0.6', true );
+	wp_register_script( 'smoothdivscroll', presspage_plugin_js . 'jquery.smoothdivscroll-1.3-min.js', false, '1.3', true );
 	if ( is_page('press') ) {
-		wp_print_scripts( 'kinetic' );
-		wp_print_scripts( 'mousewheel' );
-		wp_print_scripts( 'smoothdivscroll' );
+		wp_enqueue_script( 'kinetic' );
+		wp_enqueue_script( 'mousewheel' );
+		wp_enqueue_script( 'jquery-ui' );
+		wp_enqueue_script( 'jquery-ui-widget' );
+		wp_enqueue_script( 'smoothdivscroll' );
 	}
 }
-add_action( 'wp_footer', 'presspage_load_scripts' );
+add_action( 'wp_enqueue_scripts', 'presspage_register_scripts' );
+
+/**
+ * Debug stuff
+ */
+function ap_press_add_page() {
+    $page = add_submenu_page('edit.php?post_type=ap_press','Press debug', 'Debug', 'administrator', 'ap_press_debug', 'ap_press_debug_page' );
+}
+//add_action( 'admin_menu', 'ap_press_add_page' );
+function ap_press_debug_page() {
+	// do debugging stuff here
+}
 
 /**
  * Insert post data
