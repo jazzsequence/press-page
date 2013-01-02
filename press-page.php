@@ -34,22 +34,99 @@ License: GPL3
 	include_once( presspage_plugin_dir . 'inc/post_type_press.php' );
 
 /**
+ * Register scripts
+ * registers the javascript
+ * @author Chris Reynolds
+ * @since 0.1
+ * @link http://scribu.net/wordpress/optimal-script-loading.html
+ */
+function presspage_register_scripts() {
+	wp_register_script( 'kinetic', presspage_plugin_js . 'jquery.kinetic.js', array( 'jquery', 'jquery-ui' ), '1.5', true );
+	wp_register_script( 'mousewheel', presspage_plugin_js . 'jquery.mousewheel.min.js', array( 'jquery', 'jquery-ui' ), '3.0.6', true );
+	wp_register_script( 'smoothdivscroll', presspage_plugin_js . 'jquery.smoothdivscroll-1.3-min.js', array( 'kinetic', 'mousewheel', 'jquery', 'jquery-ui', 'jquery-ui-widget', '1.3', true ) );
+}
+add_action( 'init', 'presspage_register_scripts' );
+
+/**
  * Press Page scripts
  * loads the javascript, but only on a page with the /press/ slug. This is hard-coded.
  * @author Chris Reynolds
  * @since 0.1
+ * @link http://scribu.net/wordpress/optimal-script-loading.html
  */
 function presspage_load_scripts() {
-	wp_register_script( 'kinetic', presspage_plugin_js . 'jquery.kinetic.js', array( 'jquery', 'jquery-ui' ), '1.5' );
-	wp_register_script( 'mousewheel', presspage_plugin_js . 'jquery.mousewheel.min.js', array( 'jquery', 'jquery-ui' ), '3.0.6' );
-	wp_register_script( 'smoothdivscroll', presspage_plugin_js . 'jquery.smoothdivscroll-1.3-min.js', array( 'kinetic', 'mousewheel', 'jquery', 'jquery-ui', 'jquery-ui-widget', '1.3' ) );
-	if ( !is_admin() /*&& is_page('press')*/ ) {
-		wp_enqueue_script( 'kinetic' );
-		wp_enqueue_script( 'mousewheel' );
-		wp_enqueue_script( 'smoothdivscroll' );
+	if ( is_page('press') ) {
+		wp_print_scripts( 'kinetic' );
+		wp_print_scripts( 'mousewheel' );
+		wp_print_scripts( 'smoothdivscroll' );
 	}
 }
-add_action( 'wp_print_scripts', 'presspage_load_scripts' );
+add_action( 'wp_footer', 'presspage_load_scripts' );
+
+/**
+ * Insert post data
+ * @author Chris Reynolds
+ * @since 0.5.1
+ * @link http://wordpress.stackexchange.com/a/7522
+ * @uses update_post_meta
+ * @uses wp_insert_post_data
+ * stores post meta data for the custom post types
+ */
+function ap_press_insert_post_data($data,$postarr) {
+	if ( $postarr['post_type'] == 'ap_press' ) {
+		update_post_meta($postarr['ID'], 'url', $postarr['url']);
+		update_post_meta($postarr['ID'], 'periodical', $postarr['periodical']);
+	}
+	return $data;
+}
+add_action('wp_insert_post_data','ap_press_insert_post_data',10,2);
+
+/**
+ * Save product postdata
+ * deal with saving the post and meta
+ * @author Chris Reynolds
+ * @since 0.1
+ * @uses wp_verify_nonce
+ * @uses plugin_basename
+ * @uses current_user_can
+ * @uses save_post
+ * @uses update_post_meta
+ * @uses add_post_meta
+ * @uses delete_post_meta
+ */
+function ap_press_save_press_postdata($post_id, $post) {
+   	if ( !wp_verify_nonce( $_POST['ap_noncename'], plugin_basename(__FILE__) )) {
+	return $post->ID;
+	}
+
+	/* confirm user is allowed to save page/post */
+	if ( 'page' == $_POST['post_type'] ) {
+		if ( !current_user_can( 'edit_page', $post->ID ))
+		return $post->ID;
+	} else {
+		if ( !current_user_can( 'edit_post', $post->ID ))
+		return $post->ID;
+	}
+
+	/* ready our data for storage */
+	foreach ($_POST as $key => $value) {
+        $mydata[$key] = $value;
+    }
+
+	/* Add values of $mydata as custom fields */
+	foreach ($mydata as $key => $value) {
+		if( $post->post_type == 'revision' ) return;
+		//$value = implode(',', (array)$value);
+		if(get_post_meta($post->ID, $key, FALSE)) {
+			update_post_meta($post->ID, $key, $value);
+		} else {
+			add_post_meta($post->ID, $key, $value);
+		}
+		if(!$value) delete_post_meta($post->ID, $key);
+	}
+}
+
+add_action('save_post', 'ap_press_save_press_postdata', 1, 2); // save the custom fields
 
 /**
  * Press Page icons
