@@ -4,6 +4,17 @@
 
 A WordPress plugin to display a custom post type for press features in a horizontal sliding scroll
 
-This plugin uses the following GitHub projects:  
-[WordPress GitHub Plugin Updater](https://github.com/jkudish/WordPress-GitHub-Plugin-Updater) by [jkudish](https://github.com/jkudish)  
+This plugin uses the following GitHub project:  
 [Smooth-Div-Scroll](https://github.com/tkahn/Smooth-Div-Scroll) by [tkahn](https://github.com/tkahn)
+
+##Usage
+Plugin can be used out of the box with the `[presspage]` shortcode or the included `page-press.php` template. The shortcode includes two optional parameters, if left blank, default post thumbnail size will be used. The optional parameters are `width` and `height` and control the dimensions of the images used. If one is left blank, the same value will be used for both.
+
+###Examples
+`[presspage]`
+
+`[presspage width=200]`
+
+`[presspage height=500]`
+
+`[presspage width=200 height=500]`
