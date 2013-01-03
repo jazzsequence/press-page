@@ -30,7 +30,6 @@ License: GPL3
 	define('presspage_plugin_dir', WP_PLUGIN_DIR . '/press-page/');
 	define('presspage_plugin_images', presspage_plugin_path . 'img/');
 	define('presspage_plugin_js', presspage_plugin_path . 'js/');
-	include_once( presspage_plugin_dir . 'inc/updater/updater.php' );
 	include_once( presspage_plugin_dir . 'inc/post_type_press.php' );
 
 /**
