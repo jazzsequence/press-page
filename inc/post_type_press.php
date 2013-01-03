@@ -32,7 +32,8 @@ function post_type_press() {
 		'query_var' => true,
 		'capability_type' => 'post',
 		'hierarchical' => false,
-		'supports' => array( 'title','editor','thumbnail' ),
+		//'supports' => array( 'title','editor','thumbnail' ),
+		'supports' => array( 'title','thumbnail' ), // removes the_content, but can be put back in if you so desire...
 		'exclude_from_search' => true,
 		'menu_position' => 5,
   	);
@@ -52,7 +53,7 @@ add_action( 'init', 'post_type_press', 0 );
  * @since 0.7
  * @uses add_meta_box
  * loads all the meta boxes in one place
- * adds additional meta information for presspage.  
+ * adds additional meta information for presspage.
  */
 function ap_press_metaboxes() {
 	add_meta_box( "product-details", "Article Details", "ap_press_info_meta", "ap_press", "normal", "low" );
@@ -77,9 +78,20 @@ function ap_press_info_meta() {
 	echo '<input class="widefat" type="text" name="url" value="' . get_post_meta( $post->ID, 'url', true ) . '" /><br />';
 	echo '<em>URL to the article</em></p>';
 
+/* removes periodical meta value, but can be added back in if you so desire. using post title for this instead
 	echo '<p><label for="periodical"><strong>Periodical</strong></label><br />';
 	echo '<input class="widefat" type="text" name="periodical" value="' . get_post_meta( $post->ID, 'periodical', true ) . '" /><br />';
 	echo '<em>Name of the periodical the article was published in</em></p>';
+*/
 }
+
+function ap_press_change_default_title( $title ){
+     $screen = get_current_screen();
+     if  ( 'ap_press' == $screen->post_type ) {
+          $title = 'Enter periodical name here';
+     }
+     return $title;
+}
+add_filter( 'enter_title_here', 'ap_press_change_default_title' );
 
 ?>
