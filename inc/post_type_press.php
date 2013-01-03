@@ -50,7 +50,7 @@ add_action( 'init', 'post_type_press', 0 );
 /**
  * Press meta boxes
  * @author Chris Reynolds
- * @since 0.7
+ * @since 0.1
  * @uses add_meta_box
  * loads all the meta boxes in one place
  * adds additional meta information for presspage.
@@ -63,7 +63,7 @@ add_action( 'admin_menu', 'ap_press_metaboxes' );
 /**
  * Product Meta
  * @author Chris Reynolds
- * @since 0.7
+ * @since 0.1
  * @uses wp_create_nonce
  * @uses get_post_meta
  * creates the actual meta fields on the product pages. All this stuff is optional but can be used for schema.org schemas
@@ -85,6 +85,15 @@ function ap_press_info_meta() {
 */
 }
 
+/**
+ * Change default title
+ * Changes the default title on press posts
+ * @author Chris Reynolds
+ * @since 0.1
+ * @uses get_current_screen
+ * @uses enter_title_here
+ * @link http://wp-snippets.com/change-enter-title-here-text-for-custom-post-type/
+ */
 function ap_press_change_default_title( $title ){
      $screen = get_current_screen();
      if  ( 'ap_press' == $screen->post_type ) {
