@@ -34,6 +34,20 @@ License: GPL3
 	include_once( presspage_plugin_dir . 'inc/post_type_press.php' );
 
 /**
+ * Enqueue scripts
+ * use this to enqueue the required scripts
+ * @author Chris Reynolds
+ * @since 0.1
+ */
+function presspage_enqueue_scripts() {
+	wp_enqueue_script( 'kinetic' );
+	wp_enqueue_script( 'mousewheel' );
+	wp_enqueue_script( 'jquery-ui' );
+	wp_enqueue_script( 'jquery-ui-widget' );
+	wp_enqueue_script( 'smoothdivscroll' );
+}
+add_action( 'presspage_enqueue_scripts', 'presspage_enqueue_scripts' );
+/**
  * Register scripts
  * registers the javascript
  * @author Chris Reynolds
@@ -44,11 +58,7 @@ function presspage_register_scripts() {
 	wp_register_script( 'mousewheel', presspage_plugin_js . 'jquery.mousewheel.min.js', 'jquery', '3.0.6', true );
 	wp_register_script( 'smoothdivscroll', presspage_plugin_js . 'jquery.smoothdivscroll-1.3-min.js', false, '1.3', true );
 	if ( is_page('press') ) {
-		wp_enqueue_script( 'kinetic' );
-		wp_enqueue_script( 'mousewheel' );
-		wp_enqueue_script( 'jquery-ui' );
-		wp_enqueue_script( 'jquery-ui-widget' );
-		wp_enqueue_script( 'smoothdivscroll' );
+		presspage_enqueue_scripts();
 	}
 }
 add_action( 'wp_enqueue_scripts', 'presspage_register_scripts' );
@@ -155,4 +165,58 @@ function presspage_icons() {
 }
 add_action( 'admin_head', 'presspage_icons' );
 
+
+function presspage_shortcode( $atts ) {
+	extract( shortcode_atts( array(
+		'width' => null,
+		'height' => null
+	), $atts ) );
+
+	if ( $atts['width'] )
+		$width = $atts['width'];
+	if ( $atts['height'] )
+		$height = $atts['height'];
+
+	// if either height OR width is set, but not the other, set both values to be the same (for post thumbnail support)
+	if ( $width && !$height )
+		$height = $width;
+
+	if ( !$width && $height )
+		$width = $height;
+
+	do_action('presspage_enqueue_scripts');
+
+	global $wp_query;
+	$temp = $wp_query;
+	$wp_query = null;
+	$wp_query = new WP_Query();
+	$showposts = -1;
+	$args = array(
+		'post_type' => 'ap_press',
+		'posts_per_page' => $showposts,
+		'order' => 'ASC'
+	);
+	query_posts($args); ?>
+	<script type="text/javascript">
+		jQuery(document).ready(function ($) {
+			$("#makeMeScrollable").smoothDivScroll({
+				mousewheelScrolling: "allDirections",
+				manualContinuousScrolling: true
+			});
+		});
+	</script>
+	<div id="makeMeScrollable">
+		<div class="scrollableArea">
+		<?php while ( have_posts() ) : the_post(); ?>
+			<section class="product" id="<?php the_ID(); ?>">
+				<a href="<?php echo get_post_meta( get_the_ID(), 'url', true  ); ?>" rel="bookmark" ><?php the_post_thumbnail(array($width,$height,true)); ?></a><br />
+						<a href="<?php echo get_post_meta( get_the_ID(), 'url', true  ); ?>" rel="bookmark" ><?php the_title(); ?></a>
+					</section>
+		<?php endwhile; ?>
+		</div>
+	</div><!-- makeMeScrollable -->
+		<?php $wp_query = null; $wp_query = $temp;
+		wp_reset_query();
+}
+add_shortcode( 'presspage', 'presspage_shortcode' );
 ?>
