@@ -45,6 +45,7 @@ function presspage_enqueue_scripts() {
 	wp_enqueue_script( 'jquery-ui' );
 	wp_enqueue_script( 'jquery-ui-widget' );
 	wp_enqueue_script( 'smoothdivscroll' );
+	wp_enqueue_style( 'presspage' );
 }
 add_action( 'presspage_enqueue_scripts', 'presspage_enqueue_scripts' );
 /**
@@ -57,6 +58,7 @@ function presspage_register_scripts() {
 	wp_register_script( 'kinetic', presspage_plugin_js . 'jquery.kinetic.js', 'jquery', '1.5', true );
 	wp_register_script( 'mousewheel', presspage_plugin_js . 'jquery.mousewheel.min.js', 'jquery', '3.0.6', true );
 	wp_register_script( 'smoothdivscroll', presspage_plugin_js . 'jquery.smoothdivscroll-1.3-min.js', false, '1.3', true );
+	wp_register_style( 'presspage', presspage_plugin_path . 'css/presspage.css', false, '0.1', 'screen' );
 	if ( is_page('press') ) {
 		presspage_enqueue_scripts();
 	}
