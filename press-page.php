@@ -76,7 +76,8 @@ function ap_press_debug_page() {
 function ap_press_insert_post_data($data,$postarr) {
 	if ( $postarr['post_type'] == 'ap_press' ) {
 		update_post_meta($postarr['ID'], 'url', $postarr['url']);
-		update_post_meta($postarr['ID'], 'periodical', $postarr['periodical']);
+		// uncomment this line if using the periodical meta value
+		//update_post_meta($postarr['ID'], 'periodical', $postarr['periodical']);
 	}
 	return $data;
 }
