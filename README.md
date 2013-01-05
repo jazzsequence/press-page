@@ -108,13 +108,3 @@ Here's the default CSS that is used by the plugin:
 		-moz-opacity: 0.35;
 		zoom: 1;
 	}
-
-##Screenshots
-
-![Press post menu](http://s-plugins.wordpress.org/press-page/assets/screenshot-1.png)
-
-Press post menu
-
-![Add new article page](http://s-plugins.wordpress.org/press-page/assets/screenshot-2.png)
-
-Add new article page
