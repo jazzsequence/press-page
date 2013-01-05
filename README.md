@@ -111,10 +111,10 @@ Here's the default CSS that is used by the plugin:
 
 ##Screenshots
 
-![Press post menu](http://s-plugins.wordpress.org/press-page/assets/screenshot-1.png?rev=648182)
+![Press post menu](http://s-plugins.wordpress.org/press-page/assets/screenshot-1.png)
 
 Press post menu
 
-![Add new article page](http://s-plugins.wordpress.org/press-page/assets/screenshot-2.png?rev=648182)
+![Add new article page](http://s-plugins.wordpress.org/press-page/assets/screenshot-2.png)
 
 Add new article page
