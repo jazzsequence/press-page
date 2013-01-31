@@ -33,7 +33,7 @@ Template Name: Press Page
 			<div class="entry" id="makeMeScrollable">
 				<div class="scrollableArea">
 				<?php while ( have_posts() ) : the_post(); ?>
-					<section class="product" id="<?php the_ID(); ?>">
+					<section class="press" id="<?php the_ID(); ?>">
 						<a href="<?php echo get_post_meta( get_the_ID(), 'url', true  ); ?>" rel="bookmark" ><?php the_post_thumbnail(array(190,190,true)); ?></a><br />
 						<a href="<?php echo get_post_meta( get_the_ID(), 'url', true  ); ?>" rel="bookmark" ><?php the_title(); ?></a>
 					</section>
